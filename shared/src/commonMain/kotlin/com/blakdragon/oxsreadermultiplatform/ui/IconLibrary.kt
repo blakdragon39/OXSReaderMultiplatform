@@ -1,10 +1,5 @@
 package com.blakdragon.oxsreadermultiplatform.ui
 
-import androidx.compose.runtime.Composable
-import coil3.Image
-import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
-import oxsreadermultiplatform.shared.generated.resources.Res
 
 /*
     SVGRepo.com

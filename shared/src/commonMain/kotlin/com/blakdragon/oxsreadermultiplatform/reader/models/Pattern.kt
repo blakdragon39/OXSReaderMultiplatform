@@ -1,12 +1,12 @@
 package com.blakdragon.oxsreadermultiplatform.reader.models
 
 data class Pattern(
-    val overview: PatternOverview,
-    val palette: Palette,
-    val fullStitches: List<FullStitch>,
-    val partialStitches: List<PartialStitch>,
-    val backStitches: List<BackStitch>,
-    val ornaments: List<Ornament>,
+    val overview: PatternOverview = PatternOverview(),
+    val palette: Palette = Palette(),
+    val fullStitches: List<FullStitch> = listOf(),
+    val partialStitches: List<PartialStitch> = listOf(),
+    val backStitches: List<BackStitch> = listOf(),
+    val ornaments: List<Ornament> = listOf(),
 )
 
 data class FullStitch(
@@ -36,3 +36,4 @@ data class Ornament(
     val y: Float,
     val paletteIndex: Int,
 )
+

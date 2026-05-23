@@ -7,60 +7,44 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import coil3.ImageLoader
-import coil3.SingletonImageLoader
-import coil3.compose.LocalPlatformContext
-import coil3.svg.SvgDecoder
-import com.blakdragon.oxsreadermultiplatform.reader.OXSReader
-import com.blakdragon.oxsreadermultiplatform.reader.models.Pattern
-import com.blakdragon.oxsreadermultiplatform.ui.IconLibrary
+import com.blakdragon.oxsreadermultiplatform.core.PatternUiAction
+import com.blakdragon.oxsreadermultiplatform.core.PatternUiReducer
 import com.blakdragon.oxsreadermultiplatform.ui.PatternUi
-import com.blakdragon.oxsreadermultiplatform.ui.patternPreview
+import com.blakdragon.oxsreadermultiplatform.ui.PatternUiState
 import com.blakdragon.oxsreadermultiplatform.ui.theme.OXSReaderTheme
+import org.koin.compose.koinInject
+import org.koin.core.context.startKoin
+import org.reduxkotlin.createTypedStore
 
 @Composable
 @Preview
 fun App() {
-    LoadIcons()
+    startKoin {
+        modules(appModule)
+    }
 
     OXSReaderTheme {
-        var pattern by remember { mutableStateOf<Pattern?>(null) }
-
-        LaunchedEffect(true) {
-            pattern = OXSReader.read("files/oxs_sample.oxs")
-        }
-
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            pattern?.let {
-                MainScreen(
-                    it,
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                )
-            }
+            MainScreen(
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+            )
         }
     }
 }
 
 @Composable
-fun LoadIcons() {
-    val imageLoader = ImageLoader.Builder(LocalPlatformContext.current)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        .build()
+fun MainScreen(modifier: Modifier) {
+    val reducer: PatternUiReducer = koinInject()
+    var uiState by remember { mutableStateOf(PatternUiState()) }
+    val store = createTypedStore(reducer, uiState)
+    val subscription = store.subscribe { uiState = store.state }
 
-    SingletonImageLoader.setSafe { imageLoader }
+    store.dispatch(PatternUiAction.LoadPattern("files/oxs_sample.oxs"))
 
-    // todo some sort of loading effect if this is a heavy operation
-//    IconLibrary.LoadImages()
-}
-
-@Composable
-fun MainScreen(pattern: Pattern, modifier: Modifier) {
     Box(modifier) {
-        PatternUi(pattern)
+        PatternUi(uiState, store)
     }
 }
 
@@ -70,7 +54,6 @@ fun MainScreenPreview() {
     OXSReaderTheme {
         Scaffold(Modifier.fillMaxSize()) { innerPadding ->
             MainScreen(
-                patternPreview,
                 Modifier.padding(innerPadding),
             )
         }

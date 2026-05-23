@@ -1,12 +1,11 @@
 package com.blakdragon.oxsreadermultiplatform.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +21,11 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.blakdragon.oxsreadermultiplatform.core.PatternUiAction
 import com.blakdragon.oxsreadermultiplatform.reader.models.Pattern
 import org.jetbrains.compose.resources.imageResource
+import org.reduxkotlin.TypedStore
 import oxsreadermultiplatform.shared.generated.resources.Res
-import oxsreadermultiplatform.shared.generated.resources.allDrawableResources
 import oxsreadermultiplatform.shared.generated.resources.arrow_circle_up
 
 val EDGE_OFFSET = 40.dp
@@ -37,34 +37,39 @@ const val MIN_SCALE = 1f
 const val ICON_PADDING = 3
 const val ICON_SIZE = SQUARE_SIZE - ICON_PADDING * 2
 
+data class PatternUiState(
+    val pattern: Pattern = Pattern(),
+)
+
 @Composable
 fun PatternUi(
-    pattern: Pattern,
+    uiState: PatternUiState,
+    store: TypedStore<PatternUiState, PatternUiAction>,
 ) {
-    val chartWidth = remember { pattern.overview.chartWidth }
-    val chartHeight = remember { pattern.overview.chartHeight }
+    val chartWidth = uiState.pattern.overview.chartWidth
+    val chartHeight = uiState.pattern.overview.chartHeight
+    val edgeOffset = with (LocalDensity.current) { EDGE_OFFSET.toPx() }
 
     var scale by remember { mutableFloatStateOf(MIN_SCALE) }
-
-    val edgeOffset = with (LocalDensity.current) { EDGE_OFFSET.toPx() }
-    var panOffset by remember { mutableStateOf(Offset(edgeOffset, edgeOffset)) }
     val minXOffset = minOffset(chartWidth * SQUARE_SIZE, scale, LocalWindowInfo.current.containerSize.width, edgeOffset)
     val minYOffset = minOffset(chartHeight * SQUARE_SIZE, scale, LocalWindowInfo.current.containerSize.height, edgeOffset)
 
-    val transformState = rememberTransformableState { zoomChange, panChange, _ ->
+    var panOffset by remember { mutableStateOf(Offset(edgeOffset, edgeOffset)) }
+
+    val transformState = remember { TransformableState(onTransformation = { centroid, zoomChange, panChange, rotationChange ->
         scale = (scale * zoomChange).coerceAtLeast(MIN_SCALE) // todo max scale
         panOffset = Offset(
             x = (panOffset.x + panChange.x).coerceAtMost(edgeOffset).coerceAtLeast(minXOffset),
             y = (panOffset.y + panChange.y).coerceAtMost(edgeOffset).coerceAtLeast(minYOffset),
         )
-    }
+    }) }
 
     Box(
         Modifier
             .fillMaxSize()
             .transformable(state = transformState)
     ) {
-        PatternStitches(pattern, scale, panOffset)
+        PatternStitches(uiState.pattern, scale, panOffset)
         PatternGrid(chartWidth, chartHeight, scale, panOffset)
     }
 }
@@ -78,7 +83,7 @@ fun PatternStitches(
     val squareOffset = SQUARE_SIZE * zoomScale
     val iconSize = ICON_SIZE * zoomScale
     val scaledPadding = ICON_PADDING * zoomScale
-    val temp = imageResource(Res.drawable.arrow_circle_up)
+    val temp = imageResource(Res.drawable.arrow_circle_up) // todo IconLibrary
 
     Canvas(Modifier) {
         pattern.fullStitches.forEach { stitch ->
