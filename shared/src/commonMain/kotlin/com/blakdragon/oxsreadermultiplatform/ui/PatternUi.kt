@@ -44,7 +44,6 @@ data class PatternUiState(
 @Composable
 fun PatternUi(
     uiState: PatternUiState,
-    store: TypedStore<PatternUiState, PatternUiAction>,
 ) {
     val chartWidth = uiState.pattern.overview.chartWidth
     val chartHeight = uiState.pattern.overview.chartHeight
