@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.blakdragon.oxsreadermultiplatform.core.PatternUiState
 import com.blakdragon.oxsreadermultiplatform.reader.models.Pattern
 
 val EDGE_OFFSET = 40.dp
@@ -32,10 +33,6 @@ const val MIN_SCALE = 1f
 const val MAX_SCALE = 4f
 const val ICON_PADDING = 3
 const val ICON_SIZE = SQUARE_SIZE - ICON_PADDING * 2
-
-data class PatternUiState(
-    val pattern: Pattern = Pattern(),
-)
 
 @Composable
 fun PatternUi(

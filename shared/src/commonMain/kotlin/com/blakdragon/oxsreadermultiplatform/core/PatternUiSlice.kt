@@ -3,7 +3,6 @@ package com.blakdragon.oxsreadermultiplatform.core
 import com.blakdragon.oxsreadermultiplatform.core.PatternUiAction.PatternLoaded
 import com.blakdragon.oxsreadermultiplatform.reader.OXSReader
 import com.blakdragon.oxsreadermultiplatform.reader.models.Pattern
-import com.blakdragon.oxsreadermultiplatform.ui.PatternUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -13,12 +12,17 @@ import org.reduxkotlin.GetState
 import org.reduxkotlin.TypedReducer
 import org.reduxkotlin.thunk.Thunk
 
-class PatternUiReducer : TypedReducer<PatternUiState, PatternUiAction> {
+data class PatternUiState(
+    val pattern: Pattern = Pattern(),
+)
 
-    override fun invoke(state: PatternUiState, action: PatternUiAction): PatternUiState {
+class PatternUiReducer : TypedReducer<AppState, Any> {
+
+    override fun invoke(state: AppState, action: Any): AppState {
         return when (action) {
-            is PatternUiAction.LoadPattern -> PatternUiState(Pattern())
-            is PatternUiAction.PatternLoaded -> PatternUiState(action.pattern)
+            is PatternUiAction.LoadPattern -> state.copy(patternUiState = PatternUiState(Pattern()))
+            is PatternUiAction.PatternLoaded -> state.copy(patternUiState = PatternUiState(action.pattern))
+            else -> state
         }
     }
 }

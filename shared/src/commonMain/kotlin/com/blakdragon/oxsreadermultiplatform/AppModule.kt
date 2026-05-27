@@ -1,16 +1,36 @@
 package com.blakdragon.oxsreadermultiplatform
 
-import com.blakdragon.oxsreadermultiplatform.core.PatternUiAction
+import com.blakdragon.oxsreadermultiplatform.core.AppState
 import com.blakdragon.oxsreadermultiplatform.core.PatternUiReducer
-import com.blakdragon.oxsreadermultiplatform.ui.PatternUiState
+import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.reduxkotlin.TypedStore
 import org.reduxkotlin.applyMiddleware
-import org.reduxkotlin.createTypedStore
+import org.reduxkotlin.combineReducers
+import org.reduxkotlin.createStore
 import org.reduxkotlin.thunk.createThunkMiddleware
 
-val appModule = module {
-    factory<TypedStore<PatternUiState, PatternUiAction>> {
-        createTypedStore(PatternUiReducer(), PatternUiState(), applyMiddleware(createThunkMiddleware()))
+object KoinPouch {
+
+    private var isInitialized = false
+
+    fun init() {
+        if (isInitialized) return
+
+        startKoin {
+            modules(appModule)
+        }
+
+        isInitialized = true
     }
+}
+
+val appModule = module {
+    single<TypedStore<AppState, Any>> { createStore(
+        reducer = combineReducers(
+            PatternUiReducer(),
+        ),
+        preloadedState = AppState(),
+        enhancer = applyMiddleware(createThunkMiddleware())
+    )}
 }

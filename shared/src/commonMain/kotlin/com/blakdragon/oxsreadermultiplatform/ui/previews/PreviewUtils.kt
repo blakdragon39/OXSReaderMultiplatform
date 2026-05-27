@@ -1,4 +1,4 @@
-package com.blakdragon.oxsreadermultiplatform.ui
+package com.blakdragon.oxsreadermultiplatform.ui.previews
 
 import com.blakdragon.oxsreadermultiplatform.reader.models.FullStitch
 import com.blakdragon.oxsreadermultiplatform.reader.models.Palette
