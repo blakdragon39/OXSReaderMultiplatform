@@ -6,7 +6,7 @@ object PastelPalette {
     val purple = Color(0xff924eba)
     val lightPink = Color(0xffffc8dd)
     val pink = Color(0xffffafcc)
-    val lightBlue = Color(0xffbde0fe)
+    val lightBlue = Color(0xffe3eef7)
     val blue = Color(0xffa2d2ff)
     val darkBlue = Color(0xff4682ba)
 }

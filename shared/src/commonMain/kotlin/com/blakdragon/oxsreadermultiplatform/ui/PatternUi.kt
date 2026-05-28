@@ -79,7 +79,7 @@ fun PatternStitches(
     val scaledPadding = ICON_PADDING * zoomScale
     val glyphBitmaps = IconLibrary.bitmaps()
 
-    Canvas(Modifier) {
+    Canvas(Modifier.fillMaxSize()) {
         pattern.fullStitches.forEach { stitch ->
             drawImage(
                 image = glyphBitmaps[stitch.paletteIndex % glyphBitmaps.size], // todo need more glyphs, and logging for when there's not enough

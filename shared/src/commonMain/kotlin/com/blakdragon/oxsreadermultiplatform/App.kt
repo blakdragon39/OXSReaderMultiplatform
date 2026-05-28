@@ -57,8 +57,9 @@ fun MainScreen(modifier: Modifier) {
 
     Box(modifier) {
         PatternScreen(
+            store = store,
             patternUiState = appState.patternUiState,
-            patternScreenState = appState.patternScreenState,
+            screenState = appState.patternScreenState,
             onBackPressed = { }, // todo how do we even begin navigation :melting:
         )
     }

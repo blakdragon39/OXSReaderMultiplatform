@@ -1,9 +1,12 @@
 package com.blakdragon.oxsreadermultiplatform.ui.previews
 
+import com.blakdragon.oxsreadermultiplatform.core.AppState
 import com.blakdragon.oxsreadermultiplatform.reader.models.FullStitch
 import com.blakdragon.oxsreadermultiplatform.reader.models.Palette
 import com.blakdragon.oxsreadermultiplatform.reader.models.Pattern
 import com.blakdragon.oxsreadermultiplatform.reader.models.PatternOverview
+import org.reduxkotlin.Store
+import org.reduxkotlin.createStore
 
 val patternPreview = Pattern(
     overview = PatternOverview(
@@ -31,3 +34,5 @@ val patternPreview = Pattern(
     backStitches = listOf(),
     ornaments = listOf(),
 )
+
+val mockStore: Store<AppState> = createStore({ state, _ -> state }, AppState())
