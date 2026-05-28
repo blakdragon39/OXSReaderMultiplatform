@@ -12,7 +12,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.rememberLifecycleOwner
 import com.blakdragon.oxsreadermultiplatform.core.AppState
 import com.blakdragon.oxsreadermultiplatform.core.PatternUiAction
-import com.blakdragon.oxsreadermultiplatform.ui.PatternUi
+import com.blakdragon.oxsreadermultiplatform.ui.PatternScreen
+import com.blakdragon.oxsreadermultiplatform.ui.theme.LocalColors
+import com.blakdragon.oxsreadermultiplatform.ui.theme.OXSReaderColors
 import com.blakdragon.oxsreadermultiplatform.ui.theme.OXSReaderTheme
 import org.koin.compose.koinInject
 import org.reduxkotlin.TypedStore
@@ -23,12 +25,16 @@ fun App() {
     KoinPouch.init()
 
     OXSReaderTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            MainScreen(
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-            )
+        CompositionLocalProvider(
+            LocalColors provides OXSReaderColors(), // todo ways to change the theme!
+        ) {
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                MainScreen(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                )
+            }
         }
     }
 }
@@ -50,6 +56,10 @@ fun MainScreen(modifier: Modifier) {
     store.dispatch(PatternUiAction.LoadPattern("files/oxs_sample.oxs", scope))
 
     Box(modifier) {
-        PatternUi(appState.patternUiState)
+        PatternScreen(
+            patternUiState = appState.patternUiState,
+            patternScreenState = appState.patternScreenState,
+            onBackPressed = { }, // todo how do we even begin navigation :melting:
+        )
     }
 }

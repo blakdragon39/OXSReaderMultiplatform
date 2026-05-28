@@ -1,6 +1,7 @@
 package com.blakdragon.oxsreadermultiplatform
 
 import com.blakdragon.oxsreadermultiplatform.core.AppState
+import com.blakdragon.oxsreadermultiplatform.core.PatternScreenReducer
 import com.blakdragon.oxsreadermultiplatform.core.PatternUiReducer
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -29,6 +30,7 @@ val appModule = module {
     single<TypedStore<AppState, Any>> { createStore(
         reducer = combineReducers(
             PatternUiReducer(),
+            PatternScreenReducer(),
         ),
         preloadedState = AppState(),
         enhancer = applyMiddleware(createThunkMiddleware())

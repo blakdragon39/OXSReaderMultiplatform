@@ -82,7 +82,7 @@ fun PatternStitches(
     Canvas(Modifier) {
         pattern.fullStitches.forEach { stitch ->
             drawImage(
-                image = glyphBitmaps[stitch.paletteIndex % glyphBitmaps.size],
+                image = glyphBitmaps[stitch.paletteIndex % glyphBitmaps.size], // todo need more glyphs, and logging for when there's not enough
                 dstOffset = (Offset((stitch.x * squareOffset) + scaledPadding, (stitch.y * squareOffset) + scaledPadding) + offset).toIntOffset(),
                 dstSize = Size(iconSize, iconSize).toIntSize(),
             )

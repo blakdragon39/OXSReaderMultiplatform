@@ -2,10 +2,19 @@ package com.blakdragon.oxsreadermultiplatform.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+object PastelPalette {
+    val purple = Color(0xff924eba)
+    val lightPink = Color(0xffffc8dd)
+    val pink = Color(0xffffafcc)
+    val lightBlue = Color(0xffbde0fe)
+    val blue = Color(0xffa2d2ff)
+    val darkBlue = Color(0xff4682ba)
+}
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+object NeutralPalette {
+    val offWhite = Color(0xfff4f1de)
+    val orange = Color(0xffe07a5f)
+    val navy = Color(0xff3d405b)
+    val green = Color(0xff81b29a)
+    val yellow = Color(0xfff2cc8f)
+}
